@@ -168,7 +168,7 @@ class Learner(BaseLearner):
             self.train_dataset, batch_size=self.batch_size, shuffle=True,
             num_workers=num_workers,
             generator=g_train,
-            worker_init_fn=make_worker_init_fn(self.args["seed"]),
+            #worker_init_fn=make_worker_init_fn(self.args["seed"]),
         )
 
         self.test_dataset = data_manager.get_dataset(np.arange(0, self._total_classes), source="test", mode="test")

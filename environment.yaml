@@ -1,7 +1,6 @@
 name: dime
 channels:
   - pytorch
-  - nvidia
   - conda-forge
   - defaults
 
@@ -11,7 +10,6 @@ dependencies:
 
   - pytorch
   - torchvision
-  - pytorch-cuda=12.4
 
   - numpy
   - scipy

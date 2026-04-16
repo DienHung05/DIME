@@ -290,17 +290,23 @@ def _log_weighted_metrics(
         logger.exception("Failed to compute weighted metrics (%s): %s", prefix, e)
 
 
-def _set_device(args: dict) -> None:
-    """
-    Convert a list of device IDs to torch.device objects and store back in args["device"].
-    """
-    devices = []
-    for dev in args["device"]:
-        if dev == -1:
-            devices.append(torch.device("cpu"))
-        else:
-            devices.append(torch.device(f"cuda:{dev}"))
-    args["device"] = devices
+def _set_device(args):
+    device_type = args["device"]
+    gpus = []
+    
+    # Tự động nhận diện chip Apple Silicon (MPS), nếu không có thì dùng CPU
+    if torch.backends.mps.is_available():
+        default_device = torch.device("mps")
+    elif torch.cuda.is_available():
+        default_device = torch.device("cuda:0")
+    else:
+        default_device = torch.device("cpu")
+
+    for device in device_type:
+        gpus.append(default_device)
+    
+    args["device"] = gpus
+    print(f"[*] Using device: {default_device}")
 
 
 def _set_random(seed: int = 1) -> None:
